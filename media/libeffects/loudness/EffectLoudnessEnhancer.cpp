@@ -313,6 +313,14 @@ int LE_command(effect_handle_t self, uint32_t cmdCode, uint32_t cmdSize,
     LoudnessEnhancerContext * pContext = (LoudnessEnhancerContext *)self;
     int retsize;
 
+    union {
+        void * replyData;
+        int32_t * replyData32;
+        int * iReplyData; //in case ints are 16 bits... as the various violations for pReplyData seemed to
+                          //  intentionally differentiate *(int *)pReplyData from *(int32_t *)pReplyData
+    };
+    replyData = pReplyData;
+
     if (pContext == NULL || pContext->mState == LOUDNESS_ENHANCER_STATE_UNINITIALIZED) {
         return -EINVAL;
     }
@@ -323,14 +331,14 @@ int LE_command(effect_handle_t self, uint32_t cmdCode, uint32_t cmdSize,
         if (pReplyData == NULL || *replySize != sizeof(int)) {
             return -EINVAL;
         }
-        *(int *) pReplyData = LE_init(pContext);
+        iReplyData[0] = LE_init(pContext);
         break;
     case EFFECT_CMD_SET_CONFIG:
         if (pCmdData == NULL || cmdSize != sizeof(effect_config_t)
                 || pReplyData == NULL || *replySize != sizeof(int)) {
             return -EINVAL;
         }
-        *(int *) pReplyData = LE_setConfig(pContext,
+        iReplyData[0] = LE_setConfig(pContext,
                 (effect_config_t *) pCmdData);
         break;
     case EFFECT_CMD_GET_CONFIG:
@@ -352,7 +360,7 @@ int LE_command(effect_handle_t self, uint32_t cmdCode, uint32_t cmdSize,
         }
         pContext->mState = LOUDNESS_ENHANCER_STATE_ACTIVE;
         ALOGV("EFFECT_CMD_ENABLE() OK");
-        *(int *)pReplyData = 0;
+        iReplyData[0] = 0;
         break;
     case EFFECT_CMD_DISABLE:
         if (pReplyData == NULL || *replySize != sizeof(int)) {
@@ -363,7 +371,7 @@ int LE_command(effect_handle_t self, uint32_t cmdCode, uint32_t cmdSize,
         }
         pContext->mState = LOUDNESS_ENHANCER_STATE_INITIALIZED;
         ALOGV("EFFECT_CMD_DISABLE() OK");
-        *(int *)pReplyData = 0;
+        iReplyData[0] = 0;
         break;
     case EFFECT_CMD_GET_PARAM: {
         if (pCmdData == NULL ||
@@ -374,16 +382,21 @@ int LE_command(effect_handle_t self, uint32_t cmdCode, uint32_t cmdSize,
         }
         memcpy(pReplyData, pCmdData, sizeof(effect_param_t) + sizeof(uint32_t));
         effect_param_t *p = (effect_param_t *)pReplyData;
+        union {
+            char *data;
+            uint32_t *data32;
+        };
+        data = p->data;
         p->status = 0;
         *replySize = sizeof(effect_param_t) + sizeof(uint32_t);
         if (p->psize != sizeof(uint32_t)) {
             p->status = -EINVAL;
             break;
         }
-        switch (*(uint32_t *)p->data) {
+        switch (data32[0]) {
         case LOUDNESS_ENHANCER_PARAM_TARGET_GAIN_MB:
             ALOGV("get target gain(mB) = %d", pContext->mTargetGainmB);
-            *((int32_t *)p->data + 1) = pContext->mTargetGainmB;
+            data32[1] = pContext->mTargetGainmB;
             p->vsize = sizeof(int32_t);
             *replySize += sizeof(int32_t);
             break;
@@ -397,20 +410,25 @@ int LE_command(effect_handle_t self, uint32_t cmdCode, uint32_t cmdSize,
             pReplyData == NULL || *replySize != sizeof(int32_t)) {
             return -EINVAL;
         }
-        *(int32_t *)pReplyData = 0;
+        replyData32[0] = 0;
         effect_param_t *p = (effect_param_t *)pCmdData;
         if (p->psize != sizeof(uint32_t) || p->vsize != sizeof(uint32_t)) {
-            *(int32_t *)pReplyData = -EINVAL;
+            replyData32[0] = -EINVAL;
             break;
         }
-        switch (*(uint32_t *)p->data) {
+        union {
+            char *data;
+            uint32_t *data32;
+        };
+        data = p->data;
+        switch (data32[0]) {
         case LOUDNESS_ENHANCER_PARAM_TARGET_GAIN_MB:
-            pContext->mTargetGainmB = *((int32_t *)p->data + 1);
+            pContext->mTargetGainmB = (int32_t)data32[1];
             ALOGV("set target gain(mB) = %d", pContext->mTargetGainmB);
             LE_reset(pContext); // apply parameter update
             break;
         default:
-            *(int32_t *)pReplyData = -EINVAL;
+            replyData32[0] = -EINVAL;
         }
         } break;
     case EFFECT_CMD_SET_DEVICE:

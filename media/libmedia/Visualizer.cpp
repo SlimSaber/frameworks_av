@@ -221,14 +221,17 @@ status_t Visualizer::setMeasurementMode(uint32_t mode) {
 
     Mutex::Autolock _l(mCaptureLock);
 
-    uint32_t buf32[sizeof(effect_param_t) / sizeof(uint32_t) + 2];
-    effect_param_t *p = (effect_param_t *)buf32;
+    union {
+        uint32_t buf32[sizeof(effect_param_t) / sizeof(uint32_t) + 2];
+        effect_param_t bufp;
+    };
+    effect_param_t *p = &bufp;
 
     p->psize = sizeof(uint32_t);
     p->vsize = sizeof(uint32_t);
     int32_t const vpmm = VISUALIZER_PARAM_MEASUREMENT_MODE;
-    memcpy(&p->data, &vpmm, sizeof(vpmm));
-    memcpy(&p->data+sizeof(vpmm), &mode, sizeof(mode));
+    memcpy(&(p->data[0]), &vpmm, sizeof(vpmm));
+    memcpy(&(p->data[sizeof(int32_t)]), &mode, sizeof(mode));
     //*(int32_t *)p->data = VISUALIZER_PARAM_MEASUREMENT_MODE;
     //*((int32_t *)p->data + 1)= mode;
     status_t status = setParameter(p);
