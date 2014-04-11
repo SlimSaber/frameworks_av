@@ -383,8 +383,8 @@ void TimedEventQueue::clearPowerManager()
     mPowerManager.clear();
 }
 
-void TimedEventQueue::PMDeathRecipient::binderDied(const wp<IBinder>& who)
-{
+void TimedEventQueue::PMDeathRecipient::binderDied(
+        const wp<IBinder>& /* who */) {
     mQueue->clearPowerManager();
 }
 

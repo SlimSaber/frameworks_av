@@ -746,7 +746,7 @@ status_t WifiDisplaySource::sendM16(int32_t sessionID) {
 }
 
 status_t WifiDisplaySource::onReceiveM1Response(
-        int32_t sessionID, const sp<ParsedMessage> &msg) {
+        int32_t /* sessionID */, const sp<ParsedMessage> &msg) {
     int32_t statusCode;
     if (!msg->getStatusCode(&statusCode)) {
         return ERROR_MALFORMED;
@@ -995,7 +995,7 @@ status_t WifiDisplaySource::onReceiveM4Response(
 }
 
 status_t WifiDisplaySource::onReceiveM5Response(
-        int32_t sessionID, const sp<ParsedMessage> &msg) {
+        int32_t /* sessionID */, const sp<ParsedMessage> &msg) {
     int32_t statusCode;
     if (!msg->getStatusCode(&statusCode)) {
         return ERROR_MALFORMED;
@@ -1009,7 +1009,7 @@ status_t WifiDisplaySource::onReceiveM5Response(
 }
 
 status_t WifiDisplaySource::onReceiveM16Response(
-        int32_t sessionID, const sp<ParsedMessage> &msg) {
+        int32_t sessionID, const sp<ParsedMessage> & /* msg */) {
     // If only the response was required to include a "Session:" header...
 
     CHECK_EQ(sessionID, mClientSessionID);
@@ -1684,7 +1684,7 @@ WifiDisplaySource::HDCPObserver::HDCPObserver(
 }
 
 void WifiDisplaySource::HDCPObserver::notify(
-        int msg, int ext1, int ext2, const Parcel *obj) {
+        int msg, int ext1, int ext2, const Parcel * /* obj */) {
     sp<AMessage> notify = mNotify->dup();
     notify->setInt32("msg", msg);
     notify->setInt32("ext1", ext1);

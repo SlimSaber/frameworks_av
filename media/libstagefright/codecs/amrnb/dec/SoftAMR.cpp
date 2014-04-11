@@ -274,7 +274,7 @@ static size_t getFrameSize(unsigned FT) {
     return frameSize;
 }
 
-void SoftAMR::onQueueFilled(OMX_U32 portIndex) {
+void SoftAMR::onQueueFilled(OMX_U32 /* portIndex */) {
     List<BufferInfo *> &inQueue = getPortQueue(0);
     List<BufferInfo *> &outQueue = getPortQueue(1);
 

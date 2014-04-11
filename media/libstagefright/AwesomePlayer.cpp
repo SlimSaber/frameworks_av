@@ -110,7 +110,7 @@ struct AwesomeEvent : public TimedEventQueue::Event {
 protected:
     virtual ~AwesomeEvent() {}
 
-    virtual void fire(TimedEventQueue *queue, int64_t /* now_us */) {
+    virtual void fire(TimedEventQueue * /* queue */, int64_t /* now_us */) {
         (mPlayer->*mMethod)();
     }
 
@@ -3427,7 +3427,7 @@ bool AwesomePlayer::isWidevineContent() const {
     return false;
 }
 
-status_t AwesomePlayer::dump(int fd, const Vector<String16> &args) const {
+status_t AwesomePlayer::dump(int fd, const Vector<String16> & /* args */) const {
     Mutex::Autolock autoLock(mStatsLock);
     int dfd = dup(fd);
 

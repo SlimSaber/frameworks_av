@@ -269,7 +269,7 @@ status_t OMXNodeInstance::sendCommand(
 }
 
 status_t OMXNodeInstance::getParameter(
-        OMX_INDEXTYPE index, void *params, size_t size) {
+        OMX_INDEXTYPE index, void *params, size_t /* size */) {
     Mutex::Autolock autoLock(mLock);
 
     OMX_ERRORTYPE err = OMX_GetParameter(mHandle, index, params);
@@ -278,7 +278,7 @@ status_t OMXNodeInstance::getParameter(
 }
 
 status_t OMXNodeInstance::setParameter(
-        OMX_INDEXTYPE index, const void *params, size_t size) {
+        OMX_INDEXTYPE index, const void *params, size_t /* size */) {
     Mutex::Autolock autoLock(mLock);
 
     OMX_ERRORTYPE err = OMX_SetParameter(
@@ -288,7 +288,7 @@ status_t OMXNodeInstance::setParameter(
 }
 
 status_t OMXNodeInstance::getConfig(
-        OMX_INDEXTYPE index, void *params, size_t size) {
+        OMX_INDEXTYPE index, void *params, size_t /* size */) {
     Mutex::Autolock autoLock(mLock);
 
     OMX_ERRORTYPE err = OMX_GetConfig(mHandle, index, params);
@@ -296,7 +296,7 @@ status_t OMXNodeInstance::getConfig(
 }
 
 status_t OMXNodeInstance::setConfig(
-        OMX_INDEXTYPE index, const void *params, size_t size) {
+        OMX_INDEXTYPE index, const void *params, size_t /* size */) {
     Mutex::Autolock autoLock(mLock);
 
     OMX_ERRORTYPE err = OMX_SetConfig(
@@ -613,7 +613,7 @@ status_t OMXNodeInstance::useGraphicBuffer(
 }
 
 status_t OMXNodeInstance::updateGraphicBufferInMeta(
-        OMX_U32 portIndex, const sp<GraphicBuffer>& graphicBuffer,
+        OMX_U32 /* portIndex */, const sp<GraphicBuffer>& graphicBuffer,
         OMX::buffer_id buffer) {
     Mutex::Autolock autoLock(mLock);
 
@@ -969,7 +969,7 @@ void OMXNodeInstance::onEvent(
 
 // static
 OMX_ERRORTYPE OMXNodeInstance::OnEvent(
-        OMX_IN OMX_HANDLETYPE hComponent,
+        OMX_IN OMX_HANDLETYPE /* hComponent */,
         OMX_IN OMX_PTR pAppData,
         OMX_IN OMX_EVENTTYPE eEvent,
         OMX_IN OMX_U32 nData1,
@@ -985,7 +985,7 @@ OMX_ERRORTYPE OMXNodeInstance::OnEvent(
 
 // static
 OMX_ERRORTYPE OMXNodeInstance::OnEmptyBufferDone(
-        OMX_IN OMX_HANDLETYPE hComponent,
+        OMX_IN OMX_HANDLETYPE /* hComponent */,
         OMX_IN OMX_PTR pAppData,
         OMX_IN OMX_BUFFERHEADERTYPE* pBuffer) {
     OMXNodeInstance *instance = static_cast<OMXNodeInstance *>(pAppData);
@@ -997,7 +997,7 @@ OMX_ERRORTYPE OMXNodeInstance::OnEmptyBufferDone(
 
 // static
 OMX_ERRORTYPE OMXNodeInstance::OnFillBufferDone(
-        OMX_IN OMX_HANDLETYPE hComponent,
+        OMX_IN OMX_HANDLETYPE /* hComponent */,
         OMX_IN OMX_PTR pAppData,
         OMX_IN OMX_BUFFERHEADERTYPE* pBuffer) {
     OMXNodeInstance *instance = static_cast<OMXNodeInstance *>(pAppData);

@@ -219,55 +219,55 @@ private:
 // with the same parameter list, but discard redundant information.
 
 FLAC__StreamDecoderReadStatus FLACParser::read_callback(
-        const FLAC__StreamDecoder *decoder, FLAC__byte buffer[],
+        const FLAC__StreamDecoder * /* decoder */, FLAC__byte buffer[],
         size_t *bytes, void *client_data)
 {
     return ((FLACParser *) client_data)->readCallback(buffer, bytes);
 }
 
 FLAC__StreamDecoderSeekStatus FLACParser::seek_callback(
-        const FLAC__StreamDecoder *decoder,
+        const FLAC__StreamDecoder * /* decoder */,
         FLAC__uint64 absolute_byte_offset, void *client_data)
 {
     return ((FLACParser *) client_data)->seekCallback(absolute_byte_offset);
 }
 
 FLAC__StreamDecoderTellStatus FLACParser::tell_callback(
-        const FLAC__StreamDecoder *decoder,
+        const FLAC__StreamDecoder * /* decoder */,
         FLAC__uint64 *absolute_byte_offset, void *client_data)
 {
     return ((FLACParser *) client_data)->tellCallback(absolute_byte_offset);
 }
 
 FLAC__StreamDecoderLengthStatus FLACParser::length_callback(
-        const FLAC__StreamDecoder *decoder,
+        const FLAC__StreamDecoder * /* decoder */,
         FLAC__uint64 *stream_length, void *client_data)
 {
     return ((FLACParser *) client_data)->lengthCallback(stream_length);
 }
 
 FLAC__bool FLACParser::eof_callback(
-        const FLAC__StreamDecoder *decoder, void *client_data)
+        const FLAC__StreamDecoder * /* decoder */, void *client_data)
 {
     return ((FLACParser *) client_data)->eofCallback();
 }
 
 FLAC__StreamDecoderWriteStatus FLACParser::write_callback(
-        const FLAC__StreamDecoder *decoder, const FLAC__Frame *frame,
+        const FLAC__StreamDecoder * /* decoder */, const FLAC__Frame *frame,
         const FLAC__int32 * const buffer[], void *client_data)
 {
     return ((FLACParser *) client_data)->writeCallback(frame, buffer);
 }
 
 void FLACParser::metadata_callback(
-        const FLAC__StreamDecoder *decoder,
+        const FLAC__StreamDecoder * /* decoder */,
         const FLAC__StreamMetadata *metadata, void *client_data)
 {
     ((FLACParser *) client_data)->metadataCallback(metadata);
 }
 
 void FLACParser::error_callback(
-        const FLAC__StreamDecoder *decoder,
+        const FLAC__StreamDecoder * /* decoder */,
         FLAC__StreamDecoderErrorStatus status, void *client_data)
 {
     ((FLACParser *) client_data)->errorCallback(status);
@@ -658,7 +658,7 @@ FLACSource::~FLACSource()
     }
 }
 
-status_t FLACSource::start(MetaData *params)
+status_t FLACSource::start(MetaData * /* params */)
 {
     ALOGV("FLACSource::start");
 
@@ -756,8 +756,7 @@ sp<MediaSource> FLACExtractor::getTrack(size_t index)
 }
 
 sp<MetaData> FLACExtractor::getTrackMetaData(
-        size_t index, uint32_t flags)
-{
+        size_t index, uint32_t /* flags */) {
     if (mInitCheck != OK || index > 0) {
         return NULL;
     }
