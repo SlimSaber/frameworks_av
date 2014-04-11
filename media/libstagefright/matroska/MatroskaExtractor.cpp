@@ -39,6 +39,8 @@
 
 #include <cutils/properties.h>
 
+#include <inttypes.h>
+
 namespace android {
 
 struct DataSourceReader : public mkvparser::IMkvReader {
@@ -418,8 +420,8 @@ void BlockIterator::seek(
         if (isAudio || block()->IsKey()) {
             // Accept the first key frame
             *actualFrameTimeUs = (block()->GetTime(mCluster) + 500LL) / 1000LL;
-            ALOGV("Requested seek point: %lld actual: %lld",
-                  seekTimeUs, actualFrameTimeUs);
+            ALOGV("Requested seek point: %" PRId64 " actual: %" PRId64,
+                  seekTimeUs, *actualFrameTimeUs);
             break;
         }
     }
