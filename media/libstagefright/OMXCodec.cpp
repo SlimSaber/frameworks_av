@@ -2820,9 +2820,6 @@ void OMXCodec::on_message(const omx_message &msg) {
                 }
                 mFilledBuffers.push_back(i);
                 mBufferFilled.signal();
-                if (mIsEncoder) {
-                    sched_yield();
-                }
             }
 
             break;
