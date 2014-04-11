@@ -120,7 +120,7 @@ MediaScanResult StagefrightMediaScanner::processFile(
 }
 
 MediaScanResult StagefrightMediaScanner::processFileInternal(
-        const char *path, const char *mimeType,
+        const char *path, const char * /* mimeType */,
         MediaScannerClient &client) {
     const char *extension = strrchr(path, '.');
 
