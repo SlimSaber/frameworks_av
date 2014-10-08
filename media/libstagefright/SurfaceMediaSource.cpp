@@ -471,7 +471,9 @@ void SurfaceMediaSource::onBuffersReleased() {
 
     Mutex::Autolock lock(mMutex);
 
+#ifdef QCOM_HARDWARE
     mBuffersReleased = true;
+#endif
     mFrameAvailableCondition.signal();
 
     for (int i = 0; i < BufferQueue::NUM_BUFFER_SLOTS; i++) {
