@@ -1252,7 +1252,7 @@ status_t LiveSession::getDuration(int64_t *durationUs) const {
     for (size_t i = 0; i < mFetcherInfos.size(); ++i) {
         int64_t fetcherDurationUs = mFetcherInfos.valueAt(i).mDurationUs;
 
-        if (fetcherDurationUs >= 0ll && fetcherDurationUs > maxDurationUs) {
+        if (fetcherDurationUs > maxDurationUs) {
             maxDurationUs = fetcherDurationUs;
         }
     }
