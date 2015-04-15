@@ -47,6 +47,7 @@ struct ElementaryStreamQueue {
     ElementaryStreamQueue(Mode mode, uint32_t flags = 0);
 
     status_t appendData(const void *data, size_t size, int64_t timeUs);
+    void signalEOS();
     void clear(bool clearFormat);
 
     sp<ABuffer> dequeueAccessUnit();
@@ -61,6 +62,7 @@ private:
 
     Mode mMode;
     uint32_t mFlags;
+    bool mEOSReached;
 
     sp<ABuffer> mBuffer;
     List<RangeInfo> mRangeInfos;
